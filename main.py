@@ -73,8 +73,10 @@ def bot_message(message):
     if message.chat.type == 'private':
         if message.text == 'Подписки':
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            tg_id = message.from_user.id
+            user_id = str(findUserId(tg_id)[0])
             subscribes = cursor.execute(
-                '''SELECT name FROM categories INNER JOIN subscribes ON categories.id=subscribes.id_category''').fetchall()
+                '''SELECT name FROM subscribes  INNER JOIN categories  ON categories.id=subscribes.id_category WHERE id_user = ?''', (user_id,)).fetchall()
             i = 0
             while i < len(subscribes):
                 print(subscribes[i])
