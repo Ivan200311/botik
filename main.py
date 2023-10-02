@@ -113,6 +113,23 @@ def bot_message(message):
                            (id, cat_id[0][0]))
             connect.commit()
             bot.reply_to(message, 'Вы отписались')
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            tg_id = message.from_user.id
+            user_id = str(findUserId(tg_id)[0])
+            subscribes = cursor.execute(
+                '''SELECT name FROM subscribes  INNER JOIN categories  ON categories.id=subscribes.id_category WHERE id_user = ?''', (user_id,)).fetchall()
+            i = 0
+            while i < len(subscribes):
+                print(subscribes[i])
+                sub = types.KeyboardButton('- ' + subscribes[i][0])
+                i = i + 1
+                markup.add(sub)
+            back = types.KeyboardButton('Назад')
+            markup.add(back)
+            bot.reply_to(message, 'Подписки', reply_markup=markup)
+
+
+
         elif message.text == 'Новости':
 
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -157,7 +174,7 @@ def bot_message(message):
             button_categories = types.KeyboardButton('Категории')
             button_sub = types.KeyboardButton('Подписки')
             markup.add(button_news, button_categories, button_sub)
-            bot.reply_to(message, "Назад", reply_markup=markup)
+            bot.send_message(message.chat.id, "Что Вам нужно ?", reply_markup=markup)
 
 
 
