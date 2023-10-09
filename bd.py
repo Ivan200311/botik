@@ -54,6 +54,21 @@ connect.commit()
 # cursor.execute('''INSERT INTO categories (name) VALUES("technology")''')
 # connect.commit()
 
+arr = ["sports", "business", "entertainment", "general", "health", "science", "technology"]
+
+
+catearr = cursor.execute ('SELECT * from categories').fetchone()
+
+
+if catearr ==None:
+    for i in arr:
+
+        cursor.execute("INSERT INTO categories (id, name) VALUES (NULL, ?)", (i,))
+        connect.commit()
+
+
+
+
 
 def searchUserCategory(user_id):
     connect = sqlite3.connect('bd.db', check_same_thread=False)
